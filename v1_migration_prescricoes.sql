@@ -96,7 +96,8 @@ BEGIN
             SYSDATE,
             A.cd_paciente
         FROM DBAMV.ATENDIME A
-        WHERE A.cd_atendimento = :nova.cd_atendimento;
+        WHERE A.cd_atendimento = :nova.cd_atendimento
+            AND A.cd_multi_empresa = 1;
     EXCEPTION
         WHEN OTHERS THEN
             v_status := 'ERROR: ' || DBMS_UTILITY.FORMAT_ERROR_STACK;
@@ -130,7 +131,7 @@ BEGIN
         WHERE prescr_id = :nova.cd_pre_med
             AND prescr_sended_status IS NOT NULL
             AND prescr_sended_status NOT IN ('1')
-            AND EXISTS (SELECT 1 FROM DBAMV.ATENDIME A WHERE A.cd_atendimento = :nova.cd_atendimento);
+            AND EXISTS (SELECT 1 FROM DBAMV.ATENDIME A WHERE A.cd_atendimento = :nova.cd_atendimento AND a.cd_multi_empresa = 1);
     EXCEPTION
         WHEN OTHERS THEN
             v_status := 'ERROR: ' || DBMS_UTILITY.FORMAT_ERROR_STACK;
